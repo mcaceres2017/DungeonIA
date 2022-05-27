@@ -16,4 +16,7 @@ public class protoPiso : MonoBehaviour
     {
     	suelo.SetTile(position, groundTile);
     }
+
+
+
 }
