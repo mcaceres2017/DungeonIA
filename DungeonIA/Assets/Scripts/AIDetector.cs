@@ -12,9 +12,9 @@ public class AIDetector : MonoBehaviour
     [SerializeField]
     private Transform target = null;
     [SerializeField]
-    private LayerMask playerLayerMask;
+    private LayerMask playerLayerMask; // Capa donde esta el enemigo (target).
     [SerializeField]
-    private LayerMask visibilityLayer;
+    private LayerMask visibilityLayer; // La capa donde se checkeara para buscar al target.
 
     [field: SerializeField]
     public bool TargetVisible { get; private set; }
@@ -31,6 +31,7 @@ public class AIDetector : MonoBehaviour
     private void Start()
     {
         StartCoroutine(DetectionCoroutine());
+
     }
 
     private void Update()
@@ -61,6 +62,7 @@ public class AIDetector : MonoBehaviour
     {
         if (Target == null || Target.gameObject.activeSelf == false || Vector2.Distance(transform.position, Target.position) > viewRadius + 1)
         {
+            
             Target = null;
         }
     }
@@ -70,6 +72,7 @@ public class AIDetector : MonoBehaviour
         Collider2D collision = Physics2D.OverlapCircle(transform.position, viewRadius, playerLayerMask);
         if (collision != null)
         {
+            
             Target = collision.transform;
         }
     }
@@ -77,6 +80,7 @@ public class AIDetector : MonoBehaviour
     IEnumerator DetectionCoroutine()
     {
         yield return new WaitForSeconds(detectionCheckDelay);
+
         DetectTarget();
         StartCoroutine(DetectionCoroutine());
 

@@ -7,13 +7,13 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public Rigidbody2D rb;
     public Animator animator;
-    private bool running;
+  
     Vector2 moveDirection;
     
     // Start is called before the first frame update
     void Start()
     {   
-        running=false;
+        
         gameObject.name="Player";
     }
 

@@ -11,9 +11,11 @@ public class bullet : MonoBehaviour
         
         gameObject.name="Bullet";
         Destroy(gameObject,2f);
+        
     }
     private void OnCollisionEnter2D(Collision2D collision)
-    {   GameObject collisionGameObject = collision.gameObject;
+    {   
+        GameObject collisionGameObject = collision.gameObject;
         if( collisionGameObject.name != "Player" ){
             Destroy(gameObject);
         }

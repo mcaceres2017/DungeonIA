@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da2590c9e49e18e43b3fb120670160b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 2.5
+  viewRadius: 2.67
   detectionCheckDelay: 0.1
   target: {fileID: 0}
   playerLayerMask:

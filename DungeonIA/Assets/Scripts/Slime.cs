@@ -29,11 +29,13 @@ public class Slime : MonoBehaviour
             if(transform.position.x > Target.position.x)
             {
                 transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
+                Debug.Log("el target esta a la izquierda.");
 
             }
             else if(transform.position.x < Target.position.x)
             {
                 transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+                Debug.Log("el target esta a la derecha.");
             }
 
 
@@ -41,8 +43,9 @@ public class Slime : MonoBehaviour
             animator.SetFloat("Speed",moveSpeed);
         
         }
-        else{
 
+        else{
+            //Debug.Log("target no esta, slime quieto.");
             animator.SetFloat("Speed",0);
         
         }
