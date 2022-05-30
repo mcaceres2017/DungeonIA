@@ -26,6 +26,17 @@ public class Slime : MonoBehaviour
         
         if(Script.TargetVisible)
         {
+            if(transform.position.x > Target.position.x)
+            {
+                transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
+
+            }
+            else if(transform.position.x < Target.position.x)
+            {
+                transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+            }
+
+
             transform.position = Vector2.MoveTowards(transform.position,Target.position,moveSpeed* Time.deltaTime);
             animator.SetFloat("Speed",moveSpeed);
         
