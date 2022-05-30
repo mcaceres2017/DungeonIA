@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Slime : MonoBehaviour
+public class Skeleton : MonoBehaviour
 {   
     public float heal=15;
     public float moveSpeed = 2f;
@@ -12,7 +12,7 @@ public class Slime : MonoBehaviour
     public Animator animator;
     void Start()
     {
-        gameObject.name="Slime";
+        
 
     }
 
