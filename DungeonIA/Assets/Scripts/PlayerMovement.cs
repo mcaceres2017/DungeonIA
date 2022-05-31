@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {   GameObject collisionGameObject = collision.gameObject;
         if( collisionGameObject.tag == "Slime" )
-        {
+        {   
             takeHit(10f);     
         }
         

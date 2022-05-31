@@ -10,6 +10,8 @@ public class Slime : MonoBehaviour
     public AIDetector Script;
     public Transform Target;
     public Animator animator;
+    public AudioSource hit;
+    
     void Start()
     {
         gameObject.name="Slime";
@@ -54,16 +56,17 @@ public class Slime : MonoBehaviour
     public void takeHit(float damage){
         
         heal -=  damage;
-
-        if( heal == 0 ){
-            Destroy(gameObject);
+        hit.Play();
+        if( heal <= 0 ){
+            
+            Destroy(gameObject,1f);
         }
 
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {   GameObject collisionGameObject = collision.gameObject;
         if( collisionGameObject.tag == "bullet" )
-        {
+        {   
             takeHit(5f);     
         }
         
