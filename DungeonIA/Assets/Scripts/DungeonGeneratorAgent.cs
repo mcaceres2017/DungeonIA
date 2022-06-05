@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class DungeonGeneratorAgent : MonoBehaviour
-{	public GameObject slimePrefab;
-	public int enemyMax=3;
+{
     private Vector2Int startPosition = Vector2Int.zero;
     [SerializeField]
     private int minRoomRadius = 3;
@@ -62,16 +61,6 @@ public class DungeonGeneratorAgent : MonoBehaviour
     	wallPositions = new HashSet<Vector2Int>();
     	roomsList = new List<RectInt>();
     	ClearTileMaps();
-		
-		GameObject[] foods;
- 
-		foods = GameObject.FindGameObjectsWithTag("Slime");
-		
-		foreach(GameObject food in foods)
-		{	Debug.Log(food);
-			DestroyImmediate(food,false);
-		}
-
     	//seed
    		//in the future, it may be possible give a seed specified by the user.
     	Random.InitState((int)System.DateTime.Now.Ticks);
@@ -107,7 +96,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
     	while(agentsQueue.Count > 0)
         {
         	var agent = agentsQueue.Dequeue();
-        	//Debug.Log("tomado el agente:" + agent.name + " de la queue");
+        	Debug.Log("tomado el agente:" + agent.name + " de la queue");
         	CreateCorridor(floorPositions, agent);
         	CreateRoom(floorPositions, roomsList, agent);
 
@@ -116,7 +105,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
         	if(UnityEngine.Random.Range(1, 100) < cloneProbability && agentsQueue.Count < maxAgents && agent.hp >= minCorridorLength)
         	{
         		agentsQueue.Enqueue(new LookAheadAgent(agent.hp, agent.lastPosition, agent.previousDirection, "" + nombreClon));
-        		//Debug.Log("Clon creado");
+        		Debug.Log("Clon creado");
         		nombreClon++;
         	}
 
@@ -124,10 +113,10 @@ public class DungeonGeneratorAgent : MonoBehaviour
         	if(agent.hp >= minCorridorLength) 
         	{
         		agentsQueue.Enqueue(agent);
-        		//Debug.Log("agente " + agent.name + " volvio a la queue");
+        		Debug.Log("agente " + agent.name + " volvio a la queue");
         	}else 
         	{
-        		//Debug.Log("el agente: " + agent.name + " murio");
+        		Debug.Log("el agente: " + agent.name + " murio");
         	}
         }
     }
@@ -160,7 +149,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
         	if(corridorLength <= agent.hp) break;
         }
 
-        //Debug.Log("El agente: "+ agent.name + "escogio la direccion: " + direction.x + "," + direction.y);
+        Debug.Log("El agente: "+ agent.name + "escogio la direccion: " + direction.x + "," + direction.y);
       	
 
         List<Vector2Int> corridor = new List<Vector2Int>();
@@ -231,19 +220,10 @@ public class DungeonGeneratorAgent : MonoBehaviour
 
     	//Because the width and height of the room are radius, we start from 
     	//the center minus the radius to the center plus the radius.
-    	int enemysc=0;
-		int enemys= UnityEngine.Random.Range(1, enemyMax);
-		int min=10;
-		for(int x = currentPosition.x - width; x <= currentPosition.x + width; x++)
+    	for(int x = currentPosition.x - width; x <= currentPosition.x + width; x++)
     	{
     		for(int y = currentPosition.y - height; y <= currentPosition.y + height; y++)
     		{
-				if(UnityEngine.Random.Range(1, 100)< min && enemysc<enemys){
-					enemysc++;
-					if(min< 100)min+=10;
-					GameObject Slime=Instantiate(slimePrefab,new Vector3(x,y,0), Quaternion.identity);
-        
-				};
     			roomPositions.Add(new Vector2Int(x,y));
     		}
     	}

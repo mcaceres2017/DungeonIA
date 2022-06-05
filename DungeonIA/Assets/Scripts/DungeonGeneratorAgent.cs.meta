@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 5cb4ee860eaaf1345956e322bb7e0a69
+<<<<<<<< HEAD:DungeonIA/Assets/Scripts/AIDetector.cs.meta
+guid: 6cd20f83820fd264ab131dc266544e68
+========
+guid: cb2204a1dcfcb3c44b0714538aff72ea
+>>>>>>>> main:DungeonIA/Assets/Scripts/DungeonGeneratorAgent.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
