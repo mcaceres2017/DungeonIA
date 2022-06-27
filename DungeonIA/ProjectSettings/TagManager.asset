@@ -8,6 +8,8 @@ TagManager:
   - bullet
   - Slime
   - skeleton
+  - healPotion
+  - treasure
   layers:
   - Default
   - TransparentFX

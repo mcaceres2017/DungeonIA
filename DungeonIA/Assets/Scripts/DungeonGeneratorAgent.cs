@@ -5,8 +5,20 @@ using UnityEngine.Tilemaps;
 
 public class DungeonGeneratorAgent : MonoBehaviour
 {	public GameObject slimePrefab;
+	public GameObject superSlimePrefab;
+	public GameObject potionPrefab;
+	public GameObject chestPrefab;
+	public GameObject torchPrefab;
+	public GameObject box1Prefab;
+	public GameObject box2Prefab;
+	public GameObject box3Prefab;
+	public GameObject box4Prefab;
+	public GameObject XboxPrefab;
+	public GameObject YboxPrefab;
+	public GameObject player;
 	public int enemyMax=3;
     private Vector2Int startPosition = Vector2Int.zero;
+	//private Vector2Int startPosition = player.transform.position;
     [SerializeField]
     private int minRoomRadius = 3;
     [SerializeField]
@@ -36,6 +48,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
     private Tile floorTile;
     [SerializeField]
     private Tile wallTile;
+	private string[] Rooms=new string[4]{"Enemigos","Pociones","Jefe","Tesoro"};
 
     private LookAheadAgent agentP;
 
@@ -58,19 +71,15 @@ public class DungeonGeneratorAgent : MonoBehaviour
     // Master Method, is in charge of calling the rest.
     public void GenerateDungeon()
     {
+		
+		player.transform.position=Vector3Int.zero;
     	floorPositions = new HashSet<Vector2Int>();
     	wallPositions = new HashSet<Vector2Int>();
     	roomsList = new List<RectInt>();
     	ClearTileMaps();
+		ClearGameObjects();
 		
-		GameObject[] foods;
- 
-		foods = GameObject.FindGameObjectsWithTag("Slime");
-		
-		foreach(GameObject food in foods)
-		{	Debug.Log(food);
-			DestroyImmediate(food,false);
-		}
+
 
     	//seed
    		//in the future, it may be possible give a seed specified by the user.
@@ -82,8 +91,31 @@ public class DungeonGeneratorAgent : MonoBehaviour
     	PlaceTiles(floorPositions, floorTilemap, floorTile);
     	PlaceTiles(wallPositions, wallTilemap, wallTile);
     }
+	//clear all created gameobjects in the dungeon.
+	private void ClearGameObjects(){
+		GameObject[] slimes;
+		GameObject[] potions;
+		GameObject[] treasures;
+ 
+		slimes = GameObject.FindGameObjectsWithTag("Slime");
+		potions = GameObject.FindGameObjectsWithTag("healPotion");
+		treasures = GameObject.FindGameObjectsWithTag("treasure");
 
-    //It does what the name suggest.
+		foreach(GameObject slime in slimes)
+		{	
+			DestroyImmediate(slime,false);
+		}
+		foreach(GameObject potion in potions)
+		{	
+			DestroyImmediate(potion,false);
+		}
+		foreach(GameObject treasure in treasures)
+		{	
+			DestroyImmediate(treasure,false);
+		}
+	}
+
+    //clean all tiles of the map.
     private void ClearTileMaps()
     {
     	floorTilemap.ClearAllTiles();
@@ -93,12 +125,13 @@ public class DungeonGeneratorAgent : MonoBehaviour
     //Generates the corridors and rooms of the dungeon.
     private void StartWalk(HashSet<Vector2Int> floorPositions, List<RectInt> roomsList)
     {
+
     	int nombreClon = 1;
     	//Initialize the agent and put it in a queue.
     	Vector2Int initialPreviousDirection = GetRandomCardinalDirection();
     	agentP = new LookAheadAgent(agentHP, startPosition, initialPreviousDirection, "agente P");
 
-    	CreateRoom(floorPositions, roomsList, agentP);
+    	CreateRoom(floorPositions, roomsList, agentP,0);
     	// Put the agent in the queue.
     	Queue<LookAheadAgent> agentsQueue = new Queue<LookAheadAgent>();
     	agentsQueue.Enqueue(agentP);
@@ -108,8 +141,19 @@ public class DungeonGeneratorAgent : MonoBehaviour
         {
         	var agent = agentsQueue.Dequeue();
         	//Debug.Log("tomado el agente:" + agent.name + " de la queue");
+
         	CreateCorridor(floorPositions, agent);
-        	CreateRoom(floorPositions, roomsList, agent);
+			
+			/**
+			* 0:Inicio
+			* 1:Normal
+			* 2:Enemigos
+			* 3:Tesoro
+			* 4:Jefe
+			* 5:--
+			* 6:--
+			*/
+        	CreateRoom(floorPositions, roomsList, agent,UnityEngine.Random.Range(1,5));
 
         	//probability of creating another agent that will be a copy of the 
         	//selected one.
@@ -131,7 +175,9 @@ public class DungeonGeneratorAgent : MonoBehaviour
         	}
         }
     }
+	private void Tesoros(){
 
+	}
 
     public Vector2Int GetRandomCardinalDirection()
     {
@@ -170,8 +216,70 @@ public class DungeonGeneratorAgent : MonoBehaviour
         // walk step by step making the corridor and adding it to the list.
         for (int i = 0; i < corridorLength; i++)
         {
-            currentPosition += direction;
+			
+			currentPosition += direction;
+			
+			
+			if(true){//i!=1 && corridorLength-1!=i
+				//Debug.Log("direction X:"+direction.x+" Y:"+direction.y);
+				//up 0 1
+				if(direction.x==0 && direction.y==1){
+					//1 0
+					//-1 0
+					corridor.Add(currentPosition + new Vector2Int(1,0));
+					corridor.Add(currentPosition + new Vector2Int(-1,0));
+					if(corridorLength-1==i){
+						corridor.Add(currentPosition + new Vector2Int(0,1));
+						corridor.Add(currentPosition + new Vector2Int(-1,1));
+						corridor.Add(currentPosition + new Vector2Int(1,1));	
+					}	
+
+				}
+				//down 0 -1
+				else if(direction.x==0 && direction.y==-1){
+					//1 0
+					//-1 0
+					corridor.Add(currentPosition + new Vector2Int(1,0));
+					corridor.Add(currentPosition + new Vector2Int(-1,0));
+					if(corridorLength-1==i){
+						corridor.Add(currentPosition + new Vector2Int(0,-1));
+						corridor.Add(currentPosition + new Vector2Int(1,-1));
+						corridor.Add(currentPosition + new Vector2Int(-1,-1));	
+					}
+				
+				}
+				//left -1 0
+				else if(direction.x==-1 && direction.y==0){
+					//0 1
+					//0 -1
+					corridor.Add(currentPosition + new Vector2Int(0,1));
+					corridor.Add(currentPosition + new Vector2Int(0,-1));
+					if(corridorLength-1==i){
+						corridor.Add(currentPosition + new Vector2Int(1,1));
+						corridor.Add(currentPosition + new Vector2Int(1,0));
+						corridor.Add(currentPosition + new Vector2Int(1,-1));	
+					}
+					
+
+				}
+				//right 1 0
+				else if(direction.x==1 && direction.y==0){
+					//0 1
+					//0 -1
+					corridor.Add(currentPosition + new Vector2Int(0,1));
+					corridor.Add(currentPosition + new Vector2Int(0,-1));
+					
+					if(corridorLength-1==i){
+						corridor.Add(currentPosition + new Vector2Int(-1,1));
+						corridor.Add(currentPosition + new Vector2Int(-1,0));
+						corridor.Add(currentPosition + new Vector2Int(-1,-1));	
+					}
+
+				}
+			}
+			
             corridor.Add(currentPosition);
+
         }
 
         // updating the agent.
@@ -183,9 +291,42 @@ public class DungeonGeneratorAgent : MonoBehaviour
         //then store the corridor positions in the hashset.
         floorPositions.UnionWith(corridor);
     }
+	private void InstantiatePrefabRoomRandom(GameObject prefab,int min,int max,int p,int width,int height,int xi,int yi){
+		int count=0;
+		for(int x = xi - width +1 ; x <= xi + width -1 ; x++)
+    	{
+    		for(int y = yi - height +1 ; y <= yi + height -1 ; y++)
+    		{
+				if(UnityEngine.Random.Range(1, 100)< p && count<max && ((x!=xi && y!=yi) ||(x!=xi+1 && y!=yi) ||(x!=xi-1 && y!=yi) )  ){
+					count++;
+					if(p< 100)p+=10;
+					Instantiate(prefab,new Vector3(x,y,0)+ new Vector3(0.5f,0.5f,0), Quaternion.identity);
+        
+				}
+				
+    			
+    		}
+    	}
 
+	}
+	private GameObject GetRandomBox(){
+		int p=UnityEngine.Random.Range(1, 100);
+		
+		if(p<50) return box1Prefab;
+		else return box3Prefab;//return box2Prefab;
+		//if(p<75) return box3Prefab;
+		//else return box4Prefab;
+		
+	}
 
-    private void CreateRoom(HashSet<Vector2Int> floorPositions, List<RectInt> roomsList, LookAheadAgent agent)
+	private void InstantiatePrefabRandom(GameObject prefab,int x,int y){
+		
+		Instantiate(prefab,new Vector3(x,y,0)  + new Vector3(0.5f,0.5f,0), Quaternion.identity);
+        
+
+	}	
+
+    private void CreateRoom(HashSet<Vector2Int> floorPositions, List<RectInt> roomsList, LookAheadAgent agent,int type)
     {
     	var currentPosition = agent.lastPosition;
     	RectInt potentialRoom = new RectInt(0,0,0,0);
@@ -196,6 +337,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
     	bool overlaps;
 
     	List<Vector2Int> roomPositions = new List<Vector2Int>();
+ 
 
     	// the potential room will have limited attemps,
     	// if all the attemps at creating the room overlaps
@@ -231,23 +373,99 @@ public class DungeonGeneratorAgent : MonoBehaviour
 
     	//Because the width and height of the room are radius, we start from 
     	//the center minus the radius to the center plus the radius.
-    	int enemysc=0;
-		int enemys= UnityEngine.Random.Range(1, enemyMax);
-		int min=10;
-		for(int x = currentPosition.x - width; x <= currentPosition.x + width; x++)
+    	
+		for(int x = currentPosition.x - width ; x <= currentPosition.x + width ; x++)
     	{
-    		for(int y = currentPosition.y - height; y <= currentPosition.y + height; y++)
+    		for(int y = currentPosition.y - height ; y <= currentPosition.y + height ; y++)
     		{
-				if(UnityEngine.Random.Range(1, 100)< min && enemysc<enemys){
-					enemysc++;
-					if(min< 100)min+=10;
-					GameObject Slime=Instantiate(slimePrefab,new Vector3(x,y,0), Quaternion.identity);
-        
-				};
+				
     			roomPositions.Add(new Vector2Int(x,y));
     		}
     	}
+		//normal
+		if(type==1)
+		{
+			//slimes
+			InstantiatePrefabRoomRandom(slimePrefab,0,enemyMax,10,width,height,currentPosition.x,currentPosition.y);
+			
+			//heal potions
+			InstantiatePrefabRoomRandom( potionPrefab,0,3,10,width,height,currentPosition.x,currentPosition.y);
+		
+			
+		}
+		//enemigos
+		else if(type==2)
+		{
+			//slimes
+			InstantiatePrefabRoomRandom(superSlimePrefab,2,enemyMax,10,width,height,currentPosition.x,currentPosition.y);
+			InstantiatePrefabRoomRandom(slimePrefab,0,enemyMax,10,width,height,currentPosition.x,currentPosition.y);
+			//heal potions
+			InstantiatePrefabRoomRandom( potionPrefab,0,3,10,width,height,currentPosition.x,currentPosition.y);
+		
 
+			//boxes
+			//InstantiatePrefabRoomRandom(box1Prefab,1,3,10,width,height,currentPosition.x,currentPosition.y);
+			//InstantiatePrefabRoomRandom(box2Prefab,1,3,10,width,height,currentPosition.x,currentPosition.y);
+			
+
+			InstantiatePrefabRandom(torchPrefab,currentPosition.x-width,currentPosition.y-height);
+			InstantiatePrefabRandom(torchPrefab,currentPosition.x-width,currentPosition.y+height);
+			InstantiatePrefabRandom(torchPrefab,currentPosition.x+width,currentPosition.y+height);
+			InstantiatePrefabRandom(torchPrefab,currentPosition.x+width,currentPosition.y-height);
+		}	
+		//tesoros
+		else if(type==3)
+		{
+			//chest
+			InstantiatePrefabRandom(torchPrefab,currentPosition.x+1,currentPosition.y);
+			InstantiatePrefabRandom(chestPrefab,currentPosition.x,currentPosition.y);
+			InstantiatePrefabRandom(torchPrefab,currentPosition.x-1,currentPosition.y);
+			//slimes
+			InstantiatePrefabRoomRandom(superSlimePrefab,1,3,10,width,height,currentPosition.x,currentPosition.y);
+			
+			//heal potions
+			InstantiatePrefabRoomRandom( potionPrefab,0,3,10,width-1,height-1,currentPosition.x,currentPosition.y);
+		
+			//boxes
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-width,currentPosition.y-height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-width+1,currentPosition.y-height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-width,currentPosition.y-height+1);
+
+			
+
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-width,currentPosition.y+height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-width+1,currentPosition.y+height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-width,currentPosition.y+height-1);
+
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+width,currentPosition.y+height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+width-1,currentPosition.y+height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+width,currentPosition.y+height-1);
+
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+width,currentPosition.y-height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+width-1,currentPosition.y-height);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+width,currentPosition.y-height+1);
+
+		
+		}
+
+		//puzzle
+		else if(type==4)
+		{
+			//chest
+			InstantiatePrefabRandom(XboxPrefab,currentPosition.x,currentPosition.y+1);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x,currentPosition.y+2);
+			InstantiatePrefabRandom(YboxPrefab,currentPosition.x+1,currentPosition.y);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+2,currentPosition.y);
+			InstantiatePrefabRandom(chestPrefab,currentPosition.x,currentPosition.y);
+
+			InstantiatePrefabRandom(YboxPrefab,currentPosition.x-1,currentPosition.y);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-2,currentPosition.y);
+			InstantiatePrefabRandom(XboxPrefab,currentPosition.x,currentPosition.y-1);
+			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x,currentPosition.y-2);
+		
+		}
+
+		
     	floorPositions.UnionWith(roomPositions);
     	roomsList.Add(potentialRoom);
     }
@@ -347,7 +565,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
 
 	void Start()
     {
-        GenerateDungeon ();
+        //GenerateDungeon ();
     }
 
     // Update is called once per frame

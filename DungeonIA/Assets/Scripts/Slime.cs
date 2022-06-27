@@ -3,41 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Slime : MonoBehaviour
-{   
-    public float heal=15;
+{   public GameObject explosionPrefab;
+    public float maxheal=40;
+    public float heal=40;
     public float moveSpeed = 2f;
+    public float attackCD= 2f;
+    public float attackdamage=10f;
+    public float hitdamage=10f;
+    public float exp=1;
     public Rigidbody2D rb;
     public AIDetector Script;
     public Transform Target;
     public Animator animator;
     public AudioSource hit;
+    public EnemyHealBar healbar;
+    private float Timer;
     
     void Start()
     {
         gameObject.name="Slime";
-
+        healbar.InitHealBar(maxheal);
     }
 
     void Update()
     {
-        Target=Script.Target;
         
+        healbar.SetCurrentHeal(heal);
+        Target=Script.Target;
     }
     void FixedUpdate()
     {
-        
         if(Script.TargetVisible)
-        {
+        {   
             if(transform.position.x > Target.position.x)
             {
                 transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
-                Debug.Log("el target esta a la izquierda.");
 
             }
             else if(transform.position.x < Target.position.x)
             {
                 transform.localScale = new Vector3(1.0f,1.0f,1.0f);
-                Debug.Log("el target esta a la derecha.");
+                
             }
 
 
@@ -58,16 +64,49 @@ public class Slime : MonoBehaviour
         heal -=  damage;
         hit.Play();
         if( heal <= 0 ){
-            
-            Destroy(gameObject,1f);
+            //animator.SetBool("death",true);
+            animator.SetTrigger("death");
+            GameObject player=GameObject.FindWithTag("Player");
+            player.gameObject.GetComponent<PlayerMovement>().GetExp(exp);
+            player.gameObject.GetComponent<PlayerMovement>().GetMoney((int)exp);
+            Instantiate(explosionPrefab,gameObject.transform.position,gameObject.transform.rotation);
+            Destroy(gameObject,0.75f);
+
+
         }
 
     }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {   GameObject collisionGameObject = collision.gameObject;
-        if( collisionGameObject.tag == "bullet" )
+    public void attack(){
+        //animator.SetBool("attack",true);
+        //other.gameObject.GetComponent<PlayerMovement>().takeHit(attackdamage);
+    
+    }
+    private void OnCollisionEnter2D(Collision2D other)
+    {   
+        if(other.gameObject.tag == "bullet" )
         {   
-            takeHit(5f);     
+            takeHit(other.gameObject.GetComponent<bullet>().GetDamage());
+                 
+        }
+        
+        
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {   
+        if( other.gameObject.tag == "Player" )
+        {   
+            if(attackCD<=Timer){
+                //animator.SetBool("attack",true);
+                animator.SetTrigger("attack");
+                other.gameObject.GetComponent<PlayerMovement>().takeHit(attackdamage);
+                Timer = 0f;
+                
+            }  
+            else{
+                //animator.SetBool("attack",false);
+                Timer += Time.deltaTime;
+            }
         }
         
     }
