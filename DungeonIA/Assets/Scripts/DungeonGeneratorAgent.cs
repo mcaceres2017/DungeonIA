@@ -13,8 +13,6 @@ public class DungeonGeneratorAgent : MonoBehaviour
 	public GameObject box2Prefab;
 	public GameObject box3Prefab;
 	public GameObject box4Prefab;
-	public GameObject XboxPrefab;
-	public GameObject YboxPrefab;
 	public GameObject player;
 	public int enemyMax=3;
     private Vector2Int startPosition = Vector2Int.zero;
@@ -153,7 +151,7 @@ public class DungeonGeneratorAgent : MonoBehaviour
 			* 5:--
 			* 6:--
 			*/
-        	CreateRoom(floorPositions, roomsList, agent,UnityEngine.Random.Range(1,5));
+        	CreateRoom(floorPositions, roomsList, agent,UnityEngine.Random.Range(1,3));
 
         	//probability of creating another agent that will be a copy of the 
         	//selected one.
@@ -175,9 +173,6 @@ public class DungeonGeneratorAgent : MonoBehaviour
         	}
         }
     }
-	private void Tesoros(){
-
-	}
 
     public Vector2Int GetRandomCardinalDirection()
     {
@@ -291,6 +286,8 @@ public class DungeonGeneratorAgent : MonoBehaviour
         //then store the corridor positions in the hashset.
         floorPositions.UnionWith(corridor);
     }
+
+
 	private void InstantiatePrefabRoomRandom(GameObject prefab,int min,int max,int p,int width,int height,int xi,int yi){
 		int count=0;
 		for(int x = xi - width +1 ; x <= xi + width -1 ; x++)
@@ -448,24 +445,6 @@ public class DungeonGeneratorAgent : MonoBehaviour
 		
 		}
 
-		//puzzle
-		else if(type==4)
-		{
-			//chest
-			InstantiatePrefabRandom(XboxPrefab,currentPosition.x,currentPosition.y+1);
-			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x,currentPosition.y+2);
-			InstantiatePrefabRandom(YboxPrefab,currentPosition.x+1,currentPosition.y);
-			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x+2,currentPosition.y);
-			InstantiatePrefabRandom(chestPrefab,currentPosition.x,currentPosition.y);
-
-			InstantiatePrefabRandom(YboxPrefab,currentPosition.x-1,currentPosition.y);
-			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x-2,currentPosition.y);
-			InstantiatePrefabRandom(XboxPrefab,currentPosition.x,currentPosition.y-1);
-			InstantiatePrefabRandom(GetRandomBox(),currentPosition.x,currentPosition.y-2);
-		
-		}
-
-		
     	floorPositions.UnionWith(roomPositions);
     	roomsList.Add(potentialRoom);
     }

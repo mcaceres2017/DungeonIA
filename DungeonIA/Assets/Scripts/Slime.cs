@@ -7,7 +7,7 @@ public class Slime : MonoBehaviour
     public float maxheal=40;
     public float heal=40;
     public float moveSpeed = 2f;
-    public float attackCD= 2f;
+    public float attackCD= 1f;
     public float attackdamage=10f;
     public float hitdamage=10f;
     public float exp=1;
@@ -70,7 +70,7 @@ public class Slime : MonoBehaviour
             player.gameObject.GetComponent<PlayerMovement>().GetExp(exp);
             player.gameObject.GetComponent<PlayerMovement>().GetMoney((int)exp);
             Instantiate(explosionPrefab,gameObject.transform.position,gameObject.transform.rotation);
-            Destroy(gameObject,0.75f);
+            Destroy(gameObject,0.15f);
 
 
         }

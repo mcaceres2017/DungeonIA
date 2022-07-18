@@ -16,8 +16,13 @@ public class PlayerMovement : MonoBehaviour
     public float attackCD=1.5f;
     public Text scoreText;
     public Text levelText;
+
+
+    //Variables para el movimiento.
     public Rigidbody2D rb;
     public Animator animator;
+    Vector2 moveDirection;
+
     public AudioSource steps;
     public AudioSource hitSound;
     public AudioSource deathSound;
@@ -28,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public UIBar expBar;
     private bool Hactive;
     private bool Vactive;
-    Vector2 moveDirection;
+    
     
     
     
@@ -39,7 +44,6 @@ public class PlayerMovement : MonoBehaviour
         healBar.InitBar(maxheal);
         expBar.InitBar(10f);
         expBar.SetCurrentValue(exp);
-        levelText.GetComponent<LevelScript>().levelValue=level;
         for(int i=1;i<level;i++){
             attackCD=attackCD*0.95f;
         }
@@ -49,9 +53,18 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+    	updatePosition();
         
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveY = Input.GetAxisRaw("Vertical");
+
+
+        /**
+         * Segmento sonido al caminar.
+         * --------------------
+    	 * Cada vez que el jugador se este moviendo
+    	 * se reproduce el sonido de caminata, si el jugador
+    	 * se detiene por completo, el sonido se detiene.
+    	 */
+
 
         if(Input.GetButtonDown("Horizontal"))
         {
@@ -84,7 +97,25 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
+        //###################################
+        //???.
+        //###################################
+        damage= Mathf.Log(level)*basedamage+5;   
+    }
 
+
+    /**
+     * Segmento movimientos.
+     * --------------------
+     * Este segmento "captura" la direccion en la que 
+     * el jugador debe moverse (al apretarse una tecla)
+     * y setea la animacion correcta para cada orientacion
+     */
+
+    private void updatePosition()
+    {
+    	float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
 
         if(moveX<0)
         {
@@ -96,24 +127,29 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(1.0f,1.0f,1.0f);
         }
 
+        //El normalized es para eliminar el efecto de "derecha + arriba = doble de velocidad"
         moveDirection  = new Vector2(moveX,moveY).normalized;
-        animator.SetFloat("Speed",moveDirection.magnitude) ;
-        damage= Mathf.Log(level)*basedamage+5;
-        
+        animator.SetFloat("Speed",moveDirection.sqrMagnitude);
     }
-    public void GetMoney(int money){
-        scoreText.GetComponent<ScoreScript>().ScoreValue+=money;
+
+
+
+
+
+    public void GetMoney(int money)
+    {
         goldSound.Play();
     }
 
-    public void GetExp(float _exp){
+    public void GetExp(float _exp)
+    {
         
         exp+= _exp;
         if(exp >=10)
         {
             exp=0;
             level++;
-            levelText.GetComponent<LevelScript>().levelValue++;
+            //levelText.GetComponent<LevelScript>().levelValue++;
             attackCD=attackCD*0.95f;
             gameObject.GetComponentInChildren<PlayerController>().WaitTime=attackCD;
 
@@ -123,10 +159,10 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-
+    	//Esto permite que el jugador se mueva.
         rb.velocity = new Vector2(moveDirection.x * moveSpeed ,moveDirection.y * moveSpeed );
-
     }
+
     public void takeHit(float dam)
     {
         heal -=  (int)dam;
@@ -145,6 +181,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+    
     public void maxhealPlayer()
     {
         heal=maxheal;
@@ -156,10 +193,5 @@ public class PlayerMovement : MonoBehaviour
     {       
         GameObject collisionGameObject = collision.gameObject;
     
-    }
-    void OnDestroy()
-    {
-        Instantiate(explosionPrefab,gameObject.transform.position,gameObject.transform.rotation);
-        
     }
 }

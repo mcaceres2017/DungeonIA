@@ -13,13 +13,12 @@ GameObject:
   - component: {fileID: 1826597250764233195}
   - component: {fileID: 1322471328}
   - component: {fileID: 1826597250764233204}
-  - component: {fileID: 102767415}
-  - component: {fileID: 1322471331}
   - component: {fileID: 1322471343}
   - component: {fileID: 1322471349}
   - component: {fileID: 1322471350}
   - component: {fileID: 1322471358}
   - component: {fileID: 1322471366}
+  - component: {fileID: 6153150024917931916}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -169,38 +168,6 @@ MonoBehaviour:
   explosionPrefab: {fileID: 7547917490064262231, guid: 8c4f628d66368c241945f38c48181135, type: 3}
   healBar: {fileID: 0}
   expBar: {fileID: 0}
---- !u!58 &102767415
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826597250764233205}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.2}
-  serializedVersion: 2
-  m_Radius: 0.3
---- !u!58 &1322471331
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826597250764233205}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.2}
-  serializedVersion: 2
-  m_Radius: 0.3
 --- !u!82 &1322471343
 AudioSource:
   m_ObjectHideFlags: 0
@@ -681,6 +648,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!61 &6153150024917931916
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826597250764233205}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.04385841, y: -0.14743477}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 0.875}
+    newSize: {x: 0.5, y: 0.875}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.50835407, y: 0.6594932}
+  m_EdgeRadius: 0
 --- !u!1 &1826597250976974149
 GameObject:
   m_ObjectHideFlags: 0

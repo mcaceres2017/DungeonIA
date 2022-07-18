@@ -88,10 +88,10 @@ GameObject:
   - component: {fileID: 839041819434203141}
   - component: {fileID: 839041819434203139}
   - component: {fileID: 839041819434203640}
-  - component: {fileID: 839041819434203143}
   - component: {fileID: 839041819434203642}
   - component: {fileID: 3723182134074552630}
   - component: {fileID: 2636745584367162639}
+  - component: {fileID: 8832287477421139123}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Slime
@@ -152,7 +152,7 @@ MonoBehaviour:
   maxheal: 10
   heal: 10
   moveSpeed: 2
-  attackCD: 2
+  attackCD: 0.5
   attackdamage: 5
   hitdamage: 10
   exp: 1
@@ -214,22 +214,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &839041819434203143
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 839041819434203138}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.3
 --- !u!114 &839041819434203642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,6 +352,32 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!61 &8832287477421139123
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839041819434203138}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.00000011920929, y: -0.042522967}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 0.5}
+    newSize: {x: 0.5, y: 0.375}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5547626, y: 0.4572667}
+  m_EdgeRadius: 0
 --- !u!1 &3935991337546207303
 GameObject:
   m_ObjectHideFlags: 0

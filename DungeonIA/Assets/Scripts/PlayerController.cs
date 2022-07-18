@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private float Timer;
     private Animator weaponAnimator;
 
+    //Todo este codigo es como un puente entre el player
+    // y el arma.....
     void Start()
     {
         weaponAnimator=weapon.GetComponent<Animator>();
@@ -24,14 +26,19 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         
+        /**
+         * Segmento de disparo.
+         * -------------------
+         * Permite al jugador disparar con M1 si es que
+         * el disparo no esta en cooldown.
+         */
         
-        
-        if (Input.GetMouseButtonDown(1) && Timer<= 0)
+        if (Input.GetMouseButtonDown(0) && Timer<= 0)
         {
             weapon.Fire(Player.GetComponent<PlayerMovement>().damage);
             Timer=WaitTime;
-
         }
+        
         if(Timer>= 0){
             weaponAnimator.SetBool("cooldown",true);
         }else{
@@ -40,6 +47,7 @@ public class PlayerController : MonoBehaviour
         
         Timer -= Time.deltaTime;
         
+
         mouseDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
     }
@@ -47,8 +55,13 @@ public class PlayerController : MonoBehaviour
     {
 
        
-        Vector2 aimDirection = mouseDirection - rb.position;
+        // Esto va moviendo la flecha que apunta para disparar junto
+        // al jugador
         gameObject.transform.position=Player.transform.position + offset;
+
+        // y todo esto de aqui es para "rotar" la flecha en la direccion
+        // del mouse.
+        Vector2 aimDirection = mouseDirection - rb.position;
         float aimAngle = Mathf.Atan2(aimDirection.y,aimDirection.x)* Mathf.Rad2Deg -90f;
         rb.rotation =aimAngle;
     }
