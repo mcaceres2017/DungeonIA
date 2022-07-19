@@ -10,9 +10,8 @@ public class ManagerScene : MonoBehaviour
     {
         
     }
-    public void StartGame() {
+    public void StartGame(){
         SceneManager.LoadScene("game");
-        //
 
     }
     public void QuitGame(){

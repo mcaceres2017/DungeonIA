@@ -155,7 +155,8 @@ MonoBehaviour:
   damage: 10
   level: 1
   exp: 0
-  attackCD: 1.5
+  expToNextLevel: 1200
+  attackCD: 0.1
   scoreText: {fileID: 0}
   levelText: {fileID: 0}
   rb: {fileID: 1826597250764233194}

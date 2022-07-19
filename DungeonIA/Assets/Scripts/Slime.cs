@@ -10,7 +10,7 @@ public class Slime : MonoBehaviour
     public float attackCD= 1f;
     public float attackdamage=10f;
     public float hitdamage=10f;
-    public float exp=1;
+    public float exp= 100;
     public Rigidbody2D rb;
     public AIDetector Script;
     public Transform Target;

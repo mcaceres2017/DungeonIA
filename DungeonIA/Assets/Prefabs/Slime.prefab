@@ -155,7 +155,7 @@ MonoBehaviour:
   attackCD: 0.5
   attackdamage: 5
   hitdamage: 10
-  exp: 1
+  exp: 100
   rb: {fileID: 839041819434203141}
   Script: {fileID: 839041819434203642}
   Target: {fileID: 0}

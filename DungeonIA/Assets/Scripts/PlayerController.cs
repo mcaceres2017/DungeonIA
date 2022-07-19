@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
          * el disparo no esta en cooldown.
          */
         
-        if (Input.GetMouseButtonDown(0) && Timer<= 0)
+        if (Input.GetButton("Fire1") && Timer<= 0)
         {
             weapon.Fire(Player.GetComponent<PlayerMovement>().damage);
             Timer=WaitTime;

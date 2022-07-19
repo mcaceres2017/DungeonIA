@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float damage=10f;
     public int level =1;
     public float exp=0f;
+    public float expToNextLevel = 1200f;
     public float attackCD=1.5f;
     public Text scoreText;
     public Text levelText;
@@ -42,8 +43,9 @@ public class PlayerMovement : MonoBehaviour
     {   
         gameObject.name="Player";
         healBar.InitBar(maxheal);
-        expBar.InitBar(10f);
+        expBar.SetMax(expToNextLevel);
         expBar.SetCurrentValue(exp);
+        levelText.GetComponent<levelScript>().levelValue=level;
         for(int i=1;i<level;i++){
             attackCD=attackCD*0.95f;
         }
@@ -68,14 +70,19 @@ public class PlayerMovement : MonoBehaviour
 
         if(Input.GetButtonDown("Horizontal"))
         {
-            Hactive=true;
-            steps.Play();
-
+            if(Vactive==false)
+            {
+                Hactive=true;
+                steps.Play(); 
+            }
         }
         if(Input.GetButtonDown("Vertical"))
         {
-            Vactive=true;
-            steps.Play();
+            if(Hactive==false)
+            {
+                Vactive=true;
+                steps.Play();
+            }
         }
 
         if(Input.GetButtonUp("Horizontal"))
@@ -138,6 +145,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void GetMoney(int money)
     {
+        scoreText.GetComponent<ScoreScript>().ScoreValue+=money;
         goldSound.Play();
     }
 
@@ -145,16 +153,18 @@ public class PlayerMovement : MonoBehaviour
     {
         
         exp+= _exp;
-        if(exp >=10)
+        if(exp >= expToNextLevel)
         {
             exp=0;
             level++;
-            //levelText.GetComponent<LevelScript>().levelValue++;
+            levelText.GetComponent<levelScript>().levelValue++;
             attackCD=attackCD*0.95f;
             gameObject.GetComponentInChildren<PlayerController>().WaitTime=attackCD;
-
+            expToNextLevel = expToNextLevel * 1.2f;
         }
+
         expBar.SetCurrentValue(exp);
+        expBar.SetMax(expToNextLevel);
     }
 
     void FixedUpdate()
